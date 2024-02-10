@@ -1,0 +1,16 @@
+[tool.poetry]
+name = "ramadanplanner-backend"
+version = "0.1.0"
+description = ""
+authors = ["Abdul Ahad <abdul.ahad@brainstation-23.com>"]
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "^3.8"
+Django = "^4.2"
+django-ninja-extra = "^0.20.4"
+
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
