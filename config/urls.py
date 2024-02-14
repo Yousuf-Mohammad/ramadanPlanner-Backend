@@ -22,7 +22,7 @@ from django.urls import path
 from ninja_extra import NinjaExtraAPI
 from ninja_jwt.controller import NinjaJWTDefaultController
 
-api = NinjaExtraAPI()
+api = NinjaExtraAPI(title="RamadanPlannerAPI", version="1.0.0")
 api.register_controllers(NinjaJWTDefaultController)
 
 urlpatterns = [
