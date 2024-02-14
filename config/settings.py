@@ -28,7 +28,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = os.getenv("DJ_SECRET_KEY")
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = os.getenv("DEBUG", "FALSE") == "TRUE"
+DEBUG = os.getenv("DEBUG", "false").lower() == "true"
 
 ALLOWED_HOSTS = os.getenv("ALLOWED_HOSTS", "localhost").split(",")
 
@@ -44,20 +44,17 @@ INSTALLED_APPS = [
     "django.contrib.staticfiles",
     "ninja",
     "ninja_extra",
-    "ninja_jwt",
     "account",
 ]
 
 MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",
-    # "whitenoise.middleware.WhiteNoiseMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",
     "django.middleware.common.CommonMiddleware",
     "django.middleware.csrf.CsrfViewMiddleware",
     "django.contrib.auth.middleware.AuthenticationMiddleware",
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
-    "core.middlewares.process_put_patch",
 ]
 
 ROOT_URLCONF = "config.urls"
@@ -91,7 +88,7 @@ DATABASES = {
     }
 }
 
-if os.getenv("ENVIRONMENT") == "PRODUCTION":
+if os.getenv("ENVIRONMENT", "local").lower() == "production":
     DATABASES = {
         "default": {
             "ENGINE": "django.db.backends.postgresql",
@@ -146,4 +143,36 @@ MEDIA_URL = "media/"
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
+
+# Default user model
+
 AUTH_USER_MODEL = "account.User"
+
+
+# Email settings
+
+EMAIL_BACKEND = "django.core.mail.backends.console.EmailBackend"
+DEFAULT_FROM_EMAIL = os.environ.get("DEFAULT_FROM_EMAIL")
+
+if os.environ.get("ENVIRONMENT").lower() == "production":
+    EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
+    EMAIL_HOST = os.environ.get("EMAIL_HOST")
+    EMAIL_PORT = os.environ.get("EMAIL_PORT", 587)
+    EMAIL_USE_TLS = True
+    EMAIL_HOST_USER = os.environ.get("EMAIL_HOST_USER")
+    EMAIL_HOST_PASSWORD = os.environ.get("EMAIL_HOST_PASSWORD")
+
+
+# Frontend URL
+FRONTEND_URL = os.environ.get("FRONTEND_URL")
+
+
+# JWT Settings
+
+JWT_SECRET_KEY = os.environ.get("JWT_SECRET_KEY")
+JWT_ALGORITHM = os.environ.get("JWT_ALGORITHM", "HS256")
+JWT_EXPIRATION_DELTA = int(os.environ.get("JWT_EXPIRATION_DELTA", "3600"))
+JWT_REFRESH_EXPIRATION_DELTA = int(
+    os.environ.get("JWT_REFRESH_EXPIRATION_DELTA", "86400")
+)
+JWT_AUTH_HEADER_PREFIX = os.environ.get("JWT_AUTH_HEADER_PREFIX", "Bearer")

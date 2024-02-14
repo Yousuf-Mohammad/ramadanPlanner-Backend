@@ -18,10 +18,12 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path
 from ninja_extra import NinjaExtraAPI
-from ninja_jwt.controller import NinjaJWTDefaultController
 
-api = NinjaExtraAPI(title="RamadanPlannerAPI", version="1.0.0")
-api.register_controllers(NinjaJWTDefaultController)
+from account.middlewares import JWTAuth
+from common.utils import auto_discover_controllers
+
+api = NinjaExtraAPI(title="RamadanPlannerAPI", version="1.0.0", auth=JWTAuth())
+auto_discover_controllers(api=api)
 
 urlpatterns = [
     path("admin/", admin.site.urls),
