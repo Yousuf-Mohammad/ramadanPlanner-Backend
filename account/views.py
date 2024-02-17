@@ -21,12 +21,12 @@ from account.schemas import (
 from account.utils import create_access_token, create_refresh_token, decode_token
 from common.enums import GenericStatus
 from common.exceptions import BadRequestException, UnauthorizedException
-from common.schemas import GenericOut
+from common.schemas import GenericSchemaOut
 
 
 @api_controller("/auth", tags=["auth"], auth=None)
 class AuthAPI:
-    @http_post("register", response={201: GenericOut})
+    @http_post("register", response={201: GenericSchemaOut})
     def register(self, request, register_in: RegisterIn):
         if User.objects.filter(email=register_in.email).exists():
             raise BadRequestException("Email already taken")
@@ -39,7 +39,7 @@ class AuthAPI:
         )
 
         if user:
-            return GenericOut(message="Registration successful. Please login.")
+            return GenericSchemaOut(message="Registration successful. Please login.")
 
         raise BadRequestException("Registration failed")
 
@@ -70,7 +70,7 @@ class AuthAPI:
                 }
         raise UnauthorizedException("Invalid refresh token")
 
-    @http_post("password-reset-request", response=GenericOut)
+    @http_post("password-reset-request", response=GenericSchemaOut)
     def password_reset_request(self, request, reset_request_in: PasswordResetRequestIn):
         try:
             user = User.objects.get(email=reset_request_in.email)
@@ -86,12 +86,12 @@ class AuthAPI:
                 from_email=settings.DEFAULT_FROM_EMAIL,
                 recipient_list=[reset_request_in.email],
             )
-            return GenericOut(message="Password reset email sent.")
+            return GenericSchemaOut(message="Password reset email sent.")
 
         except User.DoesNotExist:
-            return GenericOut(message="Password reset email sent.")
+            return GenericSchemaOut(message="Password reset email sent.")
 
-    @http_post("password-reset", response=GenericOut)
+    @http_post("password-reset", response=GenericSchemaOut)
     def password_reset(self, request, password_reset_in: PasswordResetIn):
         try:
             user_id = force_str(urlsafe_base64_decode(password_reset_in.uid))
@@ -100,12 +100,12 @@ class AuthAPI:
             if default_token_generator.check_token(user, password_reset_in.token):
                 user.set_password(password_reset_in.new_password1)
                 user.save()
-                return GenericOut(message="Password reset successful.")
+                return GenericSchemaOut(message="Password reset successful.")
 
-            return GenericOut(message="Invalid token.")
+            return GenericSchemaOut(message="Invalid token.")
 
         except (TypeError, ValueError, OverflowError, User.DoesNotExist):
-            return GenericOut(message="Invalid user.")
+            return GenericSchemaOut(message="Invalid user.")
 
 
 @api_controller("/profile", tags=["profile"], permissions=[])
@@ -124,11 +124,11 @@ class ProfileAPI:
         profile.save()
         return profile
 
-    @http_patch("change-password", response=GenericOut)
+    @http_patch("change-password", response=GenericSchemaOut)
     def change_password(self, request, password_in: PasswordIn):
         user = authenticate(email=request.auth.email, password=password_in.old_password)
         if user:
             user.set_password(password_in.new_password1)
             user.save()
-            return GenericOut(message="Password updated successfully")
+            return GenericSchemaOut(message="Password updated successfully")
         raise UnauthorizedException("Invalid credentials")

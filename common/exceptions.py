@@ -21,3 +21,14 @@ class UnauthorizedException(HttpError):
     def __init__(self, message: str) -> None:
         self.message = message
         super().__init__(self.status_code, self.message)
+
+
+class NotFoundException(HttpError):
+    """Exception raised for not found requests."""
+
+    status_code = 404
+    message = "Not Found"
+
+    def __init__(self, message: str) -> None:
+        self.message = message
+        super().__init__(self.status_code, self.message)

@@ -1,5 +1,5 @@
 from ninja import Schema
 
 
-class GenericOut(Schema):
+class GenericSchemaOut(Schema):
     message: str

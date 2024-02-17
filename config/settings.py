@@ -45,6 +45,10 @@ INSTALLED_APPS = [
     "ninja",
     "ninja_extra",
     "account",
+    "checklist",
+    "content",
+    "common",
+    "org",
 ]
 
 MIDDLEWARE = [

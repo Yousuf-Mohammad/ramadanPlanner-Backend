@@ -8,4 +8,9 @@ class JWTAuth(HttpBearer):
     def authenticate(self, request, token: str):
         payload = decode_token(token)
         if payload and payload.get("type") == "access":
-            return User.objects.filter(id=payload["user_id"]).first()
+            user = User.objects.filter(id=payload["user_id"]).first()
+            if not user:
+                return None
+
+            request.user = user
+            return user
