@@ -26,9 +26,21 @@ from common.schemas import GenericSchemaOut
 class ChecklistAPI:
     @http_get("/quran", response=QuranChecklistOut)
     def get_quran_checklist(self, request):
-        return QuranChecklist.objects.get_or_create(
+        checklist_today, created = QuranChecklist.objects.get_or_create(
             user=request.auth, date=Hijri.today().to_gregorian()
-        )[0]
+        )
+        if not created:
+            return checklist_today
+
+        checklist_last_day = QuranChecklist.objects.filter(
+            user=request.auth, date=Hijri.today().to_gregorian()
+        ).last()
+
+        if checklist_last_day:
+            checklist_today.target_value = checklist_last_day.target_value
+            checklist_today.save()
+
+        return checklist_today
 
     @http_patch("/quran", response=GenericSchemaOut)
     def update_quran_checklist(self, request, quran_checklist_in: QuranChecklistIn):
