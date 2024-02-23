@@ -81,9 +81,8 @@ class ChecklistAPI:
             user=request.user, date=Hijri.today().to_gregorian()
         )
         ChecklistItem.objects.create(
-            custom_name=checklist_in.name,
             checklist=checklist,
-            user=request.user,
+            custom_name=checklist_in.name,
         )
 
         return GenericSchemaOut(message="Checklist item added")
