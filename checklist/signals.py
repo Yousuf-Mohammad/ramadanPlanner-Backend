@@ -8,6 +8,4 @@ from checklist.models import ChecklistItem, DailyActivityChecklist, DefaultCheck
 def create_default_checklist_items(sender, instance, created, **kwargs):
     if created:
         for default_item in DefaultChecklistItem.objects.all():
-            ChecklistItem.objects.create(
-                daily_activity_checklist=instance, default_item=default_item
-            )
+            ChecklistItem.objects.create(checklist=instance, default_item=default_item)
