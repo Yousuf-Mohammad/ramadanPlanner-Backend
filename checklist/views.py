@@ -1,3 +1,5 @@
+from enum import Enum
+
 from django.shortcuts import get_object_or_404
 from hijridate import Hijri
 from ninja_extra import api_controller, http_get, http_patch, http_post, permissions
@@ -34,6 +36,8 @@ class ChecklistAPI:
             user=request.user, date=Hijri.today().to_gregorian()
         )
         for key, value in quran_checklist_in.dict().items():
+            if type(value) is Enum:
+                value = value.value
             setattr(quran_checklist, key, value)
         quran_checklist.save()
         return GenericSchemaOut(message="Checklist updated")
@@ -75,7 +79,7 @@ class ChecklistAPI:
             user=request.user, date=Hijri.today().to_gregorian()
         )
         ChecklistItem.objects.create(
-            **checklist_in.dict(),
+            custom_name=checklist_in.name,
             checklist=checklist,
             user=request.user,
         )

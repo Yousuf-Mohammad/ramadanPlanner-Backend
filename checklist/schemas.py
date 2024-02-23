@@ -12,7 +12,7 @@ class QuranChecklistIn(ModelSchema):
     class Meta:
         model = QuranChecklist
         fields = [
-            "last_read_unit",
+            "unit",
             "last_read_surah",
             "last_read_value",
             "completed_value",
@@ -23,7 +23,7 @@ class QuranChecklistOut(ModelSchema):
     class Meta:
         model = QuranChecklist
         fields = [
-            "last_read_unit",
+            "unit",
             "last_read_surah",
             "last_read_value",
             "completed_value",
