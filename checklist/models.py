@@ -21,9 +21,9 @@ class QuranChecklist(AbstractChecklist):
     last_read_unit = models.CharField(
         max_length=255, choices=QuranReadUnit.choices(), blank=True
     )
-    last_read_surah = models.IntegerField(blank=True)
-    last_read_value = models.IntegerField(blank=True)
-    completed_value = models.IntegerField(blank=True)
+    last_read_surah = models.IntegerField(null=True, blank=True)
+    last_read_value = models.IntegerField(null=True, blank=True)
+    completed_value = models.IntegerField(null=True, blank=True)
 
 
 class SalahChecklist(AbstractChecklist):
