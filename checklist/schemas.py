@@ -1,9 +1,14 @@
 from typing import List, Optional
 
-from ninja import Field, ModelSchema, Schema
+from ninja import Field, ModelSchema
 
 from checklist.enums import QuranReadUnit
-from checklist.models import ChecklistItem, QuranChecklist, SalahChecklist
+from checklist.models import (
+    ChecklistItem,
+    DailyActivityChecklist,
+    QuranChecklist,
+    SalahChecklist,
+)
 
 
 class QuranChecklistIn(ModelSchema):
@@ -69,5 +74,11 @@ class ChecklistItemOut(ModelSchema):
         ]
 
 
-class DailyActivityChecklistOut(Schema):
+class DailyActivityChecklistOut(ModelSchema):
     items: List[ChecklistItemOut]
+
+    class Meta:
+        model = DailyActivityChecklist
+        fields = [
+            "id",
+        ]

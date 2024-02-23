@@ -44,9 +44,10 @@ class ChecklistAPI:
 
     @http_get("/salah", response=SalahChecklistOut)
     def get_salah_checklist(self, request):
-        return SalahChecklist.objects.get_or_create(
+        checklist, _ = SalahChecklist.objects.get_or_create(
             user=request.user, date=Hijri.today().to_gregorian()
-        )[0]
+        )
+        return checklist
 
     @http_patch("/salah/{field}/{value}", response=GenericSchemaOut)
     def update_salah_checklist(self, request, field: str, value: bool):
@@ -59,9 +60,10 @@ class ChecklistAPI:
 
     @http_get("/activities", response=DailyActivityChecklistOut)
     def get_daily_activity_checklist(self, request):
-        return DailyActivityChecklist.objects.get_or_create(
+        checklist, _ = DailyActivityChecklist.objects.get_or_create(
             user=request.user, date=Hijri.today().to_gregorian()
-        )[0]
+        )
+        return checklist
 
     @http_patch("/activities/{id}/{value}", response=GenericSchemaOut)
     def update_daily_activity_checklist(self, request, id: str, value: bool):
