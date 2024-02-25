@@ -29,6 +29,7 @@ class QuranChecklistOut(ModelSchema):
             "unit",
             "last_read_surah",
             "last_read_value",
+            "target_value",
             "completed_value",
         ]
 
