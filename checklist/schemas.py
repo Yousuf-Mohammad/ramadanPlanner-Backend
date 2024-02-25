@@ -2,7 +2,6 @@ from typing import List, Optional
 
 from ninja import Field, ModelSchema
 
-from checklist.enums import QuranReadUnit
 from checklist.models import (
     ChecklistItem,
     DailyActivityChecklist,
@@ -12,14 +11,13 @@ from checklist.models import (
 
 
 class QuranChecklistIn(ModelSchema):
-    last_read_unit: QuranReadUnit
-
     class Meta:
         model = QuranChecklist
         fields = [
             "unit",
             "last_read_surah",
             "last_read_value",
+            "target_value",
             "completed_value",
         ]
 
