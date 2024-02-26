@@ -112,7 +112,7 @@ class AuthAPI:
         user = authenticate(email=auth_in.email, password=auth_in.password)
         if user:
             user.delete()
-            return GenericSchemaOut("Account Successfully Deleted")
+            return GenericSchemaOut(message="Account Successfully Deleted")
         raise UnauthorizedException("Invalid credentials")
 
 
