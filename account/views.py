@@ -107,6 +107,14 @@ class AuthAPI:
         except (TypeError, ValueError, OverflowError, User.DoesNotExist):
             return GenericSchemaOut(message="Invalid user.")
 
+    @http_post("delete-account", response=GenericSchemaOut)
+    def delete_account(self, request, auth_in: AuthIn):
+        user = authenticate(email=auth_in.email, password=auth_in.password)
+        if user:
+            user.delete()
+            return GenericSchemaOut("Account Successfully Deleted")
+        raise UnauthorizedException("Invalid credentials")
+
 
 @api_controller("/profile", tags=["profile"], permissions=[])
 class ProfileAPI:
