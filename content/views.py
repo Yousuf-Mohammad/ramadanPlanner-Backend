@@ -10,8 +10,16 @@ from content.schemas import ContentOut
 @api_controller("/contents", tags=["content"], permissions=[permissions.AllowAny])
 class ContentAPI:
     @http_get("", response=List[ContentOut])
-    def get_content(self, request):
-        today = Hijri.today().to_gregorian()
-        # TODO if location has an offset, add offset
+    def get_content(
+        self,
+        request,
+        year: int = None,
+        month: int = None,
+        day: int = None,
+    ):
+        if all((year, month, day)):
+            date = Hijri(year, month, day).to_gregorian()
+        else:
+            date = Hijri.today().to_gregorian()
 
-        return Content.objects.filter(active_start__lte=today, active_end__gte=today)
+        return Content.objects.filter(active_start__lte=date, active_end__gte=date)
